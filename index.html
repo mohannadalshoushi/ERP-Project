@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ERP Inventory Solver</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>ERP Final Project: Inventory Management Solver</h1>
+
+  <!-- Problem 1 -->
+  <div class="problem">
+    <h2>Solved Problem 1: Average Aggregate Inventory</h2>
+    <div class="inputs">
+      <label>Weekly Demand: <input type="number" id="prob1-demand" value="50"></label>
+      <label>Shipment Size: <input type="number" id="prob1-shipment" value="350"></label>
+      <label>Lead Time (weeks): <input type="number" id="prob1-lt" value="2"></label>
+      <label>Safety Stock (weeks): <input type="number" id="prob1-ss" value="1"></label>
+      <label>Unit Value ($): <input type="number" id="prob1-value" value="650"></label>
+    </div>
+    <button onclick="solveProblem1()">Solve Problem 1</button>
+    <div id="prob1-result" class="result"></div>
+  </div>
+
+
+<!-- Problem 2: ABC Classification -->
+<div class="problem">
+  <h2>Solved Problem 2: ABC Classification</h2>
+  <p>Enter SKUs to classify by dollar usage.</p>
+  <table id="abc-table">
+    <tr>
+      <th>SKU</th>
+      <th>Description</th>
+      <th>Qty/Year</th>
+      <th>Unit Value ($)</th>
+    </tr>
+    <tr>
+      <td><input type="text" value="1" size="5"></td>
+      <td><input type="text" value="Boxes" size="12"></td>
+      <td><input type="number" value="500" size="8"></td>
+      <td><input type="number" value="3.00" size="8"></td>
+    </tr>
+    <tr>
+      <td><input type="text" value="2" size="5"></td>
+      <td><input type="text" value="Cardboard" size="12"></td>
+      <td><input type="number" value="18000" size="8"></td>
+      <td><input type="number" value="0.02" size="8"></td>
+    </tr>
+    <tr>
+      <td><input type="text" value="3" size="5"></td>
+      <td><input type="text" value="Cover stock" size="12"></td>
+      <td><input type="number" value="10000" size="8"></td>
+      <td><input type="number" value="0.75" size="8"></td>
+    </tr>
+    <tr>
+      <td><input type="text" value="4" size="5"></td>
+      <td><input type="text" value="Glue" size="12"></td>
+      <td><input type="number" value="75" size="8"></td>
+      <td><input type="number" value="40.00" size="8"></td>
+    </tr>
+    <tr>
+      <td><input type="text" value="5" size="5"></td>
+      <td><input type="text" value="Inside covers" size="12"></td>
+      <td><input type="number" value="20000" size="8"></td>
+      <td><input type="number" value="0.05" size="8"></td>
+    </tr>
+    <tr>
+      <td><input type="text" value="6" size="5"></td>
+      <td><input type="text" value="Reinforcing tape" size="12"></td>
+      <td><input type="number" value="3000" size="8"></td>
+      <td><input type="number" value="0.15" size="8"></td>
+    </tr>
+    <tr>
+      <td><input type="text" value="7" size="5"></td>
+      <td><input type="text" value="Signatures" size="12"></td>
+      <td><input type="number" value="150000" size="8"></td>
+      <td><input type="number" value="0.45" size="8"></td>
+    </tr>
+  </table>
+  <button onclick="solveProblem2()">Classify SKUs</button>
+  <div id="prob2-result" class="result"></div>
+</div>
+
+
+
+
+
+
+
+
+  <!-- Problem 3 -->
+  <div class="problem">
+    <h2>Solved Problem 3: EOQ & Total Cost</h2>
+    <div class="inputs">
+      <label>Annual Demand (D): <input type="number" id="prob3-D" value="5000"></label>
+      <label>Ordering Cost (S): <input type="number" id="prob3-S" value="15"></label>
+      <label>Holding Cost (H): <input type="number" id="prob3-H" value="4"></label>
+    </div>
+    <button onclick="solveProblem3()">Solve Problem 3</button>
+    <div id="prob3-result" class="result"></div>
+  </div>
+
+  <!-- Problem 4 -->
+  <div class="problem">
+    <h2>Solved Problem 4: Q System (Reorder Point, Safety Stock)</h2>
+    <div class="inputs">
+      <label>Daily Demand (d): <input type="number" id="prob4-d" value="100"></label>
+      <label>Std Dev Daily Demand (σ_d): <input type="number" id="prob4-sd" value="30"></label>
+      <label>Lead Time (L): <input type="number" id="prob4-L" value="3"></label>
+      <label>Ordering Cost (S): <input type="number" id="prob4-S" value="35"></label>
+      <label>Holding Cost (H): <input type="number" id="prob4-H" value="9.40"></label>
+      <label>Cycle Service Level (%): <input type="number" id="prob4-CSL" value="92"></label>
+    </div>
+    <button onclick="solveProblem4()">Solve Problem 4</button>
+    <div id="prob4-result" class="result"></div>
+  </div>
+
+ <!-- Problem 5: P System (Periodic Review) -->
+<div class="problem">
+  <h2>Solved Problem 5: P System (Periodic Review)</h2>
+  <p>Compare with Q system. Uses EOQ to determine review period.</p>
+
+  <div class="inputs">
+    <label>Daily Demand (d): <input type="number" id="prob5-d" value="100"></label>
+    <label>Std Dev Daily Demand (σ_d): <input type="number" id="prob5-sd" value="30"></label>
+    <label>Lead Time (L): <input type="number" id="prob5-L" value="3"></label>
+    <label>Ordering Cost (S): <input type="number" id="prob5-S" value="35"></label>
+    <label>Holding Cost (H): <input type="number" id="prob5-H" value="9.40"></label>
+    <label>Cycle Service Level (%): <input type="number" id="prob5-CSL" value="92"></label>
+    <label>Annual Demand (D): <input type="number" id="prob5-D" value="26000"></label>
+  </div>
+
+  <button onclick="solveProblem5()">Solve Problem 5</button>
+  <div id="prob5-result" class="result"></div>
+</div>
+
+
+
+  <!-- Problem 6 -->
+  <div class="problem">
+    <h2>Solved Problem 6: Q System with Variable Lead Time</h2>
+    <div class="inputs">
+      <label>Daily Demand (d): <input type="number" id="prob6-d" value="275"></label>
+      <label>Std Dev Daily Demand (σ_d): <input type="number" id="prob6-sd" value="30"></label>
+      <label>Lead Time (L): <input type="number" id="prob6-L" value="5"></label>
+      <label>Std Dev Lead Time (σ_L): <input type="number" id="prob6-sL" value="1"></label>
+      <label>Ordering Cost (S): <input type="number" id="prob6-S" value="10"></label>
+      <label>Holding Cost (H): <input type="number" id="prob6-H" value="0.30"></label>
+      <label>Cycle Service Level (%): <input type="number" id="prob6-CSL" value="99"></label>
+    </div>
+    <button onclick="solveProblem6()">Solve Problem 6</button>
+    <div id="prob6-result" class="result"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
