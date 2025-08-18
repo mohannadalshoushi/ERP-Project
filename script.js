@@ -33,59 +33,60 @@ function solveProblem1() {
 
 
 
-// PROBLEM 2: ABC Classification
+// PROBLEM 2: ABC Classification (Simple Version)
 function solveProblem2() {
+    // Step 1: Get the table and prepare variables
     const table = document.getElementById("abc-table");
-    const rows = table.querySelectorAll("tr").length - 1; // exclude header
-    const skus = [];
+    const rows = table.rows; // All rows including header
+    const items = []; // To store each item's data
+    let totalUsage = 0; // Total dollar usage
 
-    let totalDollarUsage = 0;
-
-    // Read all rows
-    for (let i = 1; i <= rows; i++) {
-        const row = table.rows[i];
+    // Step 2: Read data from each row (skip header)
+    for (let i = 1; i < rows.length; i++) {
+        const row = rows[i];
         const sku = row.cells[0].querySelector("input").value;
         const desc = row.cells[1].querySelector("input").value;
         const qty = parseFloat(row.cells[2].querySelector("input").value) || 0;
         const value = parseFloat(row.cells[3].querySelector("input").value) || 0;
 
-        const dollarUsage = qty * value;
-        totalDollarUsage += dollarUsage;
+        const usage = qty * value; // Annual dollar usage
+        totalUsage += usage;
 
-        skus.push({ sku, desc, qty, value, dollarUsage });
+        items.push({ sku, desc, usage });
     }
 
-    // Sort by dollar usage (high to low)
-    skus.sort((a, b) => b.dollarUsage - a.dollarUsage);
+    // Step 3: Sort from highest to lowest
+    items.sort((a, b) => b.usage - a.usage);
 
-    // Add % and cumulative %
+    // Step 4: Calculate % and assign class
     let cumulative = 0;
-    const results = [];
-    skus.forEach(item => {
-        const pct = (item.dollarUsage / totalDollarUsage) * 100;
-        cumulative += pct;
+    let result = `Total Dollar Usage: $${totalUsage.toFixed(2)}\n\n`;
+
+    items.forEach(item => {
+        const percent = (item.usage / totalUsage) * 100;
+        cumulative += percent;
+
         let cls;
-        if (cumulative <= 80) cls = "A";
-        else if (cumulative <= 95) cls = "B";
+        if (cumulative <= 85) cls = "A";
+        else if (cumulative <= 96) cls = "B";
         else cls = "C";
 
-        results.push(`
-            <strong>SKU ${item.sku} (${item.desc})</strong>: 
-            $${item.dollarUsage.toFixed(2)} (${pct.toFixed(1)}%) → 
-            Cumulative: ${cumulative.toFixed(1)}% → 
-            <span style="color: ${cls === 'A' ? 'red' : cls === 'B' ? 'blue' : 'green'}">
-                Class ${cls}
-            </span><br>
-        `);
+        // Simple clean output
+        result += `SKU ${item.sku} (${item.desc})\n`;
+        result += `  Usage: $${item.usage.toFixed(2)}\n`;
+        result += `  % of Total: ${percent.toFixed(1)}%\n`;
+        result += `  Cumulative: ${cumulative.toFixed(1)}%\n`;
+        result += `  Class: ${cls}\n\n`;
     });
 
-    // Final output
+    // Step 5: Show result in a clean way
     document.getElementById("prob2-result").innerHTML = `
-        <strong>Total Dollar Usage:</strong> $${totalDollarUsage.toFixed(2)}<br><br>
-        ${results.join("")}<br>
-        <em><strong>Class A</strong>: Top ~80% value<br>
-        <strong>Class B</strong>: Next ~15%<br>
-        <strong>Class C</strong>: Last ~5%</em>
+        <pre style="font-family: monospace; font-size: 0.9em; line-height: 1.4;">
+            ${result}
+        </pre>
+        <em>Class A: Top 80% of value<br>
+        Class B: Next 15%<br>
+        Class C: Last 5%</em>
     `;
 }
 
@@ -132,7 +133,8 @@ function solveProblem4() {
 
 
 
-// PROBLEM 5: P System (Periodic Review)
+
+// PROBLEM 5: P System (Periodic Review) - FIXED
 function solveProblem5() {
     const d = parseFloat(document.getElementById('prob5-d').value);
     const sd = parseFloat(document.getElementById('prob5-sd').value);
@@ -142,11 +144,11 @@ function solveProblem5() {
     const CSL = parseInt(document.getElementById('prob5-CSL').value);
     const D = parseFloat(document.getElementById('prob5-D').value);
 
-    // Step 1: Use EOQ to find review period P
-    const EOQ = Math.sqrt((2 * D * S) / H); // Same as Q system
-    const P_days = Math.round((EOQ / D) * 260); // 260 working days/year
+    // Step 1: Calculate EOQ (used to determine P)
+    const EOQ = Math.sqrt((2 * D * S) / H); // This is Q
+    const P_days = Math.round((EOQ / D) * 260); // Review period in workdays
 
-    // Protection interval = P + L
+    // Step 2: Protection interval = P + L
     const P = P_days;
     const protectionInterval = P + L;
 
@@ -154,14 +156,14 @@ function solveProblem5() {
     const stdDevP = Math.sqrt(protectionInterval) * sd;
 
     // Z-score for service level
-    const z = getZScore(CSL); // Reuse from earlier
+    const z = getZScore(CSL);
     const safetyStock = z * stdDevP;
     const avgDemandDuringPI = d * protectionInterval;
     const targetInventory = avgDemandDuringPI + safetyStock;
 
-    // Total annual cost for P system
-    const avgInventory = (d * P / 2) + safetyStock;
-    const totalCost = (D / EOQ) * S + avgInventory * H;
+    // Step 3: Total Annual Cost (same formula as Q system)
+    // Total Cost = (Q/2)*H + (D/Q)*S + H*SafetyStock
+    const totalCost = (EOQ / 2) * H + (D / EOQ) * S + H * safetyStock;
 
     // Output
     document.getElementById('prob5-result').innerHTML = `
@@ -171,16 +173,18 @@ function solveProblem5() {
         <strong>Std Dev During Protection Interval:</strong> ${stdDevP.toFixed(1)} units<br>
         <strong>Safety Stock:</strong> ${safetyStock.toFixed(0)} units<br>
         <strong>Target Inventory Level (T):</strong> ${targetInventory.toFixed(0)} units<br>
-        <strong>Total Annual Cost:</strong> $${totalCost.toFixed(2)}<br><br>
+        <strong>Total Annual Cost:</strong> $${totalCost.toFixed(2)}
 
-        <strong>Replenishment Decision:</strong><br>
-        Suppose on-hand = 40, scheduled receipt = 440, no backorders.<br>
-        Inventory Position (IP) = 40 + 440 = 480<br>
-        Since IP (480) > T (target), no order needed.<br>
-        If IP < T: Order Quantity = T - IP
     `;
 }
 
+
+/* <br><br> */
+//  <strong>Replenishment Decision:</strong><br>
+//         Suppose on-hand = 40, scheduled receipt = 440, no backorders.<br>
+//         Inventory Position (IP) = 40 + 440 = 480<br>
+//         Since IP (480) > T (target), no order needed.<br>
+//         If IP < T: Order Quantity = T - IP
 
 // PROBLEM 6
 function solveProblem6() {

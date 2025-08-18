@@ -1,129 +1,119 @@
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin: 30px;
-  background-color: #f4f6f9;
-  color: #333;
-  line-height: 1.6;
-}
 
-h1 {
-  color: #2c3e50;
-  text-align: center;
-  border-bottom: 3px solid #3498db;
-  padding-bottom: 10px;
-}
 
-p {
-  text-align: center;
-  font-size: 1.1em;
-  color: #555;
-}
+// // PROBLEM 2: ABC Classification
 
-.problem {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 20px;
-  margin: 25px 0;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
+// function solveProblem2() {
 
-.problem h2 {
-  margin-top: 0;
-  color: #2980b9;
-  font-size: 1.3em;
-}
+//     const table = document.getElementById("abc-table");
 
-/* Input fields */
-input[type="number"], input[type="text"] {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 100%;
-  font-size: 0.95em;
-}
+//     const rows = table.querySelectorAll("tr").length - 1; // exclude header
 
-/* Input labels */
-label {
-  font-size: 0.95em;
-  color: #555;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+//     const skus = [];
 
-/* Button */
-button {
-  background-color: #3498db;
-  color: white;
-  padding: 10px 18px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1em;
-  transition: background-color 0.3s;
-  margin: 10px 0;
-}
 
-button:hover {
-  background-color: #2980b9;
-}
 
-/* Result box */
-.result {
-  margin-top: 15px;
-  padding: 15px;
-  background-color: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 5px;
-  font-family: 'Courier New', monospace;
-  font-size: 0.95em;
-  color: #1a1a1a;
-  white-space: pre-line;
-  line-height: 1.6;
-}
+//     let totalDollarUsage = 0;
 
-/* Table for ABC Classification */
-#abc-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 15px 0;
-  font-size: 0.95em;
-}
 
-#abc-table th {
-  background-color: #2c3e50;
-  color: white;
-  text-align: left;
-  padding: 10px;
-}
 
-#abc-table td {
-  padding: 8px;
-  border-bottom: 1px solid #ddd;
-}
+//     // Read all rows
 
-#abc-table tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
+//     for (let i = 1; i <= rows; i++) {
 
-#abc-table input {
-  width: 100%;
-  padding: 5px;
-  box-sizing: border-box;
-}
+//         const row = table.rows[i];
 
-/* Responsive layout for small screens */
-@media (max-width: 768px) {
-  .problem {
-    padding: 15px;
-  }
+//         const sku = row.cells[0].querySelector("input").value;
 
-  h1 {
-    font-size: 1.5em;
-  }
+//         const desc = row.cells[1].querySelector("input").value;
 
-  h2 {
-    font-size: 1.2em;
-  }
-}
+//         const qty = parseFloat(row.cells[2].querySelector("input").value) || 0;
+
+//         const value = parseFloat(row.cells[3].querySelector("input").value) || 0;
+
+
+
+//         const dollarUsage = qty * value;
+
+//         totalDollarUsage += dollarUsage;
+
+
+
+//         skus.push({ sku, desc, qty, value, dollarUsage });
+
+//     }
+
+
+
+//     // Sort by dollar usage (high to low)
+
+//     skus.sort((a, b) => b.dollarUsage - a.dollarUsage);
+
+
+
+//     // Add % and cumulative %
+
+//     let cumulative = 0;
+
+//     const results = [];
+
+//     skus.forEach(item => {
+
+//         const pct = (item.dollarUsage / totalDollarUsage) * 100;
+
+//         cumulative += pct;
+
+//         let cls;
+
+//         if (cumulative <= 80) cls = "A";
+
+//         else if (cumulative <= 95) cls = "B";
+
+//         else cls = "C";
+
+
+
+        <strong>Replenishment Decision:</strong><br>
+
+        Suppose on-hand = 40, scheduled receipt = 440, no backorders.<br>
+
+        Inventory Position (IP) = 40 + 440 = 480<br>
+
+        Since IP (480) < T (target), order quantity = T - IP = ${Math.max(0, Math.round(targetInventory - 480))} units//         results.push(`
+
+//             <strong>SKU ${item.sku} (${item.desc})</strong>: 
+
+//             $${item.dollarUsage.toFixed(2)} (${pct.toFixed(1)}%) → 
+
+//             Cumulative: ${cumulative.toFixed(1)}% → 
+
+//             <span style="color: ${cls === 'A' ? 'red' : cls === 'B' ? 'blue' : 'green'}">
+
+//                 Class ${cls}
+
+//             </span><br>
+
+//         `);
+
+//     });
+
+
+
+//     // Final output
+
+//     document.getElementById("prob2-result").innerHTML = `
+
+//         <strong>Total Dollar Usage:</strong> $${totalDollarUsage.toFixed(2)}<br><br>
+
+//         ${results.join("")}<br>
+
+//         <em><strong>Class A</strong>: Top ~80% value<br>
+
+//         <strong>Class B</strong>: Next ~15%<br>
+
+//         <strong>Class C</strong>: Last ~5%</em>
+
+//     `;
+
+// }
+
+
